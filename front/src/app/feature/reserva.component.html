@@ -1,0 +1,55 @@
+<div class="reserva-container">
+  <div class="card">
+    <header class="card-header">
+      <h2>🎟️ EventPass - Confirmar Reserva</h2>
+      <p class="evento-titulo">{{ evento.nombre }}</p>
+    </header>
+
+    <div class="card-body">
+      <div class="info-box">
+        <p><strong>Precio unitario:</strong> ${{ evento.precioUnitario }}</p>
+        <p><strong>Stock disponible:</strong> {{ evento.stockDisponible }} entradas</p>
+      </div>
+
+      <form (ngSubmit)="procesarReserva()" #reservaForm="ngForm">
+        <div class="form-group">
+          <label for="cantidad">Cantidad de entradas:</label>
+          <input 
+            type="number" 
+            id="cantidad" 
+            name="cantidad" 
+            [(ngModel)]="cantidad" 
+            min="1" 
+            max="10" 
+            required 
+            class="input-field"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="codigo">Código promocional (Opcional):</label>
+          <input 
+            type="text" 
+            id="codigo" 
+            name="codigo" 
+            [(ngModel)]="codigoDescuento" 
+            placeholder="Ej. EVENTO20" 
+            class="input-field"
+          />
+        </div>
+
+        <button type="submit" [disabled]="cargando" class="btn-submit">
+          {{ cargando ? 'Procesando...' : 'Confirmar Reserva' }}
+        </button>
+      </form>
+
+      <!-- Panel de Respuestas/Alertas -->
+      <div *ngIf="mensajeRespuesta" [ngClass]="{'alert-success': esExitoso, 'alert-danger': !esExitoso}" class="alert">
+        <p><strong>{{ esExitoso ? '✔ Éxito:' : '❌ Error:' }}</strong> {{ mensajeRespuesta }}</p>
+        <p *ngIf="esExitoso && totalPagar !== null" class="total">
+          Monto total a pagar: <span>${{ totalPagar }}</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
